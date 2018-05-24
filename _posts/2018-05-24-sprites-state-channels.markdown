@@ -80,7 +80,7 @@ author: Mathis Antony
 
   To illustrate consider the tiny payment network below on the left. First (in the middle) Alice sends a linked payment of $X to Charlie. Afterwards (on the right) Alice sends a liked payment of $Y to David. Bob is used as an intermediary for both payments because Alice doesn't have an open channel with Charlie or David.
 
-  ![](/images/sprites/blah.svg)
+  ![](/images/sprites/network.svg)
 
 In a semi decentralized setting with a spoke and hub topology users could trade with most other users by having just a single channel with one of the larger decentralized exchanges.
 
