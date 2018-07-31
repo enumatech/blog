@@ -9,6 +9,8 @@ How do you set up a private Ethereum chain and what considerations are there whe
 A private chain can potentially have huge advantages over public ones, transactions are cheaper, latencies are lower and the level of control you have is higher.
 Why would you pick Proof-of-Authority over the other consensus methods out there?
 
+<!--more-->
+
 ## Consensus comparison
 
 # Why not Proof-of-Work

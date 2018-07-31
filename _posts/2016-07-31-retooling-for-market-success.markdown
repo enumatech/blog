@@ -5,7 +5,10 @@ date:   2016-07-31 17:38:08 +0800
 categories: update
 author: Lionello Lunesu
 ---
+
 This post is a condensed version of the talk I gave at [IoT Asia 2016](http://www.internetofthingsasia.com/) in Singapore, talking about the birth of an IoT device, its subsequent development, all the way up to (*SPOILERS* but not including) its crowdfunding.
+
+<!--more-->
 
 # May 2014
 ![](/images/Lionello Lunesu - Retooling for Success/02 May 2014 Ella concept.jpg)

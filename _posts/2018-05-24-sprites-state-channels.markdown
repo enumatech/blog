@@ -5,7 +5,10 @@ date:   2018-05-24 17:30:00 +0800
 categories: update
 author: Mathis Antony
 ---
-  Enuma Technologies would like to thank the [Ethereum Foundation](https://www.ethereum.org/foundation) for a grant to implement [Sprites state channels](https://arxiv.org/abs/1702.05812). In this blog post we would like to provide an accessible introduction to Sprites and our motivations for pursuing its implementation.
+
+Enuma Technologies would like to thank the [Ethereum Foundation](https://www.ethereum.org/foundation) for a grant to implement [Sprites state channels](https://arxiv.org/abs/1702.05812). In this blog post we would like to provide an accessible introduction to Sprites and our motivations for pursuing its implementation.
+
+<!--more-->
 
 # Moving Off Chain
 

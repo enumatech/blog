@@ -5,8 +5,10 @@ date:   2016-11-01 17:38:08 +0800
 categories: update
 author: Lionello Lunesu
 ---
+
 #### Hardware Signing for Ethereum
 All popular blockchains, starting with Bitcoin through Ethereum all the way up to Zcash, use the Elliptic Curve Digital Signature Algorithm (ECDSA) for cryptographically signing transactions.
+
 Software implementations of ECDSA may be susceptible to side-channel attacks that leak
 information about the private key. Luckily, the latest generation devices are equipped with
 specialized hardware that supports key generation and signing, but leveraging these new
@@ -14,6 +16,8 @@ features for existing blockchains is not straightforward because of the
 different algorithms involved.
 
 The work in this article was done on behalf of [Trusted Key Solutions](http://trustedkey.com/) and is used in Trusted Key’s IDENTIFY secure digital identity system.
+
+<!--more-->
 
 # Cryptographic Signatures
 
