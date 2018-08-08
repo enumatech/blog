@@ -51,3 +51,8 @@ $on-laptop:        800px;
         "syntax-highlighting",
         "tooltip"
 ;
+
+// Custom CSS rules
+body {
+  overflow-wrap: break-word;
+}
