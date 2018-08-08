@@ -26,3 +26,6 @@ facebook_username:  enumatech
 markdown: kramdown
 excerpt_separator: <!--more-->
 
+# Plugins
+plugins:
+- jekyll-seo-tag
