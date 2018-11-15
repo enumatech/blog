@@ -383,6 +383,6 @@ We welcome comments at the Wcurve GIST page[^12], by e-mail at lionello &lt;AT&g
 
 [^11]: Original Python wcurve project page <http://seb.dbzteam.org/wcurve/>
 
-[^12]: `wcurve.se` in GIST <https://gist.github.com/lionello/1e466265b802a704b58d6fdcccc42e8e>
+[^12]: `wcurve.se` in GIST <https://gist.github.com/lionello/1e466265b802a704b58d6fdcccc42e8e> *Superseded by ECMath.sol:* <https://gist.github.com/lionello/db147b49042c3eabdae66ad4be6f096d>
 
 [^13]: Miscellaneous Ethereum built-ins <http://solidity.readthedocs.io/en/develop/miscellaneous.html>
