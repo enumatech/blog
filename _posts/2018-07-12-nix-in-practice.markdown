@@ -128,3 +128,5 @@ Further reading:
 
 1. https://nixos.org/
 
+# Author
+[Tamas Herman](http://github.com/onetom/)

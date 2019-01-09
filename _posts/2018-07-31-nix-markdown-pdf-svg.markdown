@@ -104,3 +104,6 @@ $ curl -s https://raw.githubusercontent.com/clojure/clojurescript/master/README.
 ```
 
 _Note: It will take a few minutes for the first time to download ~40MB of TeX of course, but it happens unattended and will work for sure!_
+
+# Author
+[Tamas Herman](http://github.com/onetom/)
