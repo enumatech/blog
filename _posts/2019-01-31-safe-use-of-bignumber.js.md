@@ -24,7 +24,7 @@ format, while good for many general purpose applications, lacks the precision
 needed for certain applications that are sensitive to rounding errors.
 
 Some programming languages such as Clojure handle this problem by automatically
-promotes numbers that require more precision to a `BigInt` or `Ratio` type.
+promoting numbers that require more precision to a `BigInt` or `Ratio` type.
 Other languages address these needs by including arbitrary-precision number
 types in their standard library. In stark contrast with these other languages,
 JavaScript is probably one of the few mainstream languages without standard
@@ -129,16 +129,11 @@ BigNumber(2).pow(256).minus(1).toString(10)
 // => 115792089237316195423570985008687907853269984665640564039457584007913129639935
 ```
 
-Similar to the use of `BigNumber` in primitive operations, this mistake is also
-easy to make. This problem cannot be reliably prevented, however, as it is not
-possible to disable this conversion behavior at this time short of using the
-`.toString(10)` method above.
-
 To avoid the exponential notation becoming a problem in practice, we can
 configure the `BigNumber` constructor to almost never convert those `BigNumber`
 instances to exponent notation by changing the `EXPONENTIAL_AT`. This is done
 by changing the `EXPONENTIAL_AT` setting from its default `[-7, 20]` to the
-maximum allowed range `[-1e9, 1e9]`
+maximum allowed range `[-1e9, 1e9]`.
 
 See
 [http://mikemcl.github.io/bignumber.js/#exponential-at](http://mikemcl.github.io/bignumber.js/#exponential-at)
@@ -146,7 +141,7 @@ See
 ## TL;DR
 
 To use `BigNumber` safely, create a new `BigNumber` constructor that prevents
-its instances from being use in primitive operations and converting to string
+its instances from being used in primitive operations and converting to string
 in exponent format:
 
 ```javascript
@@ -170,6 +165,9 @@ You can now use an instance of `SafeBigNumber` just like a regular `BigNumber`:
 const one = new SafeBigNumber(1)
 BigNumber.isBigNumber(one)          // => true
 ```
+
+## Acknowledgement
+Thanks to Kyle Williams, Lio Lunesu, and Mathis Antony for providing valuable feedback.
 
 ## Author
 [David Leung](https://github.com/dhl)
