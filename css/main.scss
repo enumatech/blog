@@ -56,3 +56,22 @@ $on-laptop:        800px;
 body {
   overflow-wrap: break-word;
 }
+
+// sort of like github markdown
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+table td,
+table th {
+  border: 1px solid #dfe2e5;
+  padding: 3px 7px;
+}
+table th {
+    background-color: #efefef;
+}
+
+table tr {
+  border-top: 1px solid #c6cbd1;
+}
