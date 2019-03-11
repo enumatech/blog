@@ -100,7 +100,7 @@ The basic building blocks of such a systems are
 
 To enforce the protocol, the smart contract requires knowledge of the clients
 balances but storing those balances on the blockchain would be expensive and
-scale poorly. This problem is be solved with the help of a cryptographic data
+scale poorly. This problem is solved with the help of a cryptographic data
 structure called the [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree).
 
 In the beginning of a round the Operator commits the root of the balance Merkle
