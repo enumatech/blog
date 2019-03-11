@@ -103,10 +103,11 @@ balances but storing those balances on the blockchain would be expensive and
 scale poorly. This problem is solved with the help of a cryptographic data
 structure called the [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree).
 
-In the beginning of a round the Operator commits the root of the balance Merkle
-tree (where each leaf contains the balance of one client) to the blockchain
-which aggregates the users' activities (trading, payments, ...) in the previous
-round.
+A Merkle tree has the interesting property where changing any part of it will
+result in a completely different Merkle tree root. In the beginning of a round
+the Operator commits the root of the balance Merkle tree (where each leaf
+contains the balance of one client) to the blockchain. This aggregates the
+result of the activities (trading, payments, ...) in the previous round.
 
 ![](/images/trex-prototype/trees.png)
 
