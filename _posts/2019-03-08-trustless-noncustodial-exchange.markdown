@@ -5,13 +5,14 @@ date:   2019-03-08 15:35:00 +0800
 categories: update
 author: Mathis Antony
 ---
-
-## Introduction
-
 About a month ago the [OAX Foundation](https://www.oax.org) and Enuma released a
 [prototype SDK](https://github.com/OAXFoundation/oax-client) of our trustless
 exchange prototype. In this post we would like to provide a accessible overview
 of the technology behind it.
+
+<!--more-->
+
+## Introduction
 
 Life is full of trade-offs. Blockchains are (or should be) decentralized and
 trustless. But these qualities come at a cost: blockchains with proof of work
