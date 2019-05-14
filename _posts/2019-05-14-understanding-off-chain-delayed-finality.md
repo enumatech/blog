@@ -207,11 +207,11 @@ to be trustless.
 
 | Payment System                | Trustless | Decentralized | Collateralized | Finality |
 | ----------------------------- | --------- | ------------- | -------------- | -------- |
-| Bank                          | ✘         | ✘             | Partially      | Instant<sup>^</sup> |
-| Blockchain                    | ✓         | ✓             | Fully          | Delayed  |
-| Payment Channel Network       | ✓         | ✓             | Fully          | Delayed  |
-| Commit Chain (w/o collateral) | ✓         | ✘             | Unnecessary    | Delayed  |
-| Commit Chain (w/ collateral)  | ✓         | ✘             | Partially<sup>*</sup> | Instant  |
+| Bank                          | <span style="color: red;">✘</span> | <span style="color: red;">✘</span> | Partially      | Instant<sup>^</sup> |
+| Blockchain                    | ✔         | ✔             | Fully          | Delayed  |
+| Payment Channel Network       | ✔         | ✔             | Fully          | Delayed  |
+| Commit Chain (w/o collateral) | ✔         | <span style="color: red;">✘</span> | Unnecessary    | Delayed  |
+| Commit Chain (w/ collateral)  | ✔         | <span style="color: red;">✘</span> | Partially<sup>*</sup> | Instant  |
 
 <small><sup>^</sup> As noted earlier, some services, such as paper checks and credit card 
 payments, do not enjoy instant finality.<br/>
