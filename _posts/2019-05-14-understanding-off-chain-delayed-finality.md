@@ -266,7 +266,7 @@ one we are working on with the OAX Foundation.
 
 ## Authors
 
-[David Leung](https://githbub.com/dhl), [Philippe Camacho](https://scholar.google.com/citations?user=-7sqCHMAAAAJ&hl=en)
+[David Leung](https://github.com/dhl), [Philippe Camacho](https://scholar.google.com/citations?user=-7sqCHMAAAAJ&hl=en)
 
 ## References
 
