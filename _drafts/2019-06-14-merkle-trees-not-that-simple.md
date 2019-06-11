@@ -7,7 +7,7 @@ author: Philippe Camacho
 ---
 
 In a previous post [(Trustless, Noncustodial Exchange Prototype)](https://blog.enuma.io/update/2019/03/08/trustless-noncustodial-exchange.html#merkle-trees), we already mentioned Merkle trees and their use in our protocol.
-Today we will go deeper into the subject highlightling how easy it is to introduce security flaws when instantiating
+Today we will go deeper into the subject, highlightling how easy it is to introduce security flaws when instantiating
  this seemingly simple cryptographic primitive.
 
 <!--more-->
@@ -16,15 +16,15 @@ Today we will go deeper into the subject highlightling how easy it is to introdu
 
 Let us start with the problem.
 In many situations, it is required to prove in a secure way that an element belongs to some set:
-For example a user contacting a server may need to prove he is part of a white list of people before being granted access.
+For example a user contacting a server may need to prove he is part of a white list before being granted access to some resources.
 Blockchain protocols such as Bitcoin require to be able to prove that a transaction belongs to a block.
 Timestamping documents can be done by proving the document belongs to a certain round of time (minute, hour, day).
 The list goes on.
 
 The question is: how can we test securely and efficiently that an element is in the set?
 A naive solution may consist of publishing the whole set so that anyone can check for himself whether an element belongs or not.
-In order to be sure the information is authentic one may rely on digital signatures or simply publish the set on public blockchain
- like bitcoin or ethereum.
+In order to be sure the information is authentic, one may rely on digital signatures or simply publish the whole set on a public blockchain
+ like Bitcoin or Ethereum.
 The drawback of this approach is obvious: as the set can be large, the cost of publishing and verifying becomes prohibitive for most of the applications.
 
 So in order to make this membership protocol more efficient we need two things:
@@ -37,8 +37,9 @@ The first point can be addressed using collision-resistant hash functions (CRHF)
 ## Collision-resistant hash functions
 
 A CRHF `$H:\{0,1\}^* \rightarrow \{0,1\}^k$` is a function that takes a string of any length as input
-a returns a string of fixed length $k$ as output. Its purpose is to provide a short representation for any kind of information such that this representation is unique in practice, that is if we have `$H(x)=H(x')$` then `$x=x'$`.
-Obviously as input set of the function is much bigger that the output set then there exists some values `$x,x'$`
+a returns a string of fixed length $k$ as output.
+Its purpose is to provide a short representation for any kind of information such that this representation is unique in practice, that is if we have `$H(x)=H(x')$` then `$x=x'$`.
+[Obviously](https://en.wikipedia.org/wiki/Pigeonhole_principle) as the input set of the function is much bigger that the output set, there exists some values `$x,x'$`
  such that `$H(x)=H(x')$` yet `$x \neq x'$`.
 Thus the security requirement<sup id="a1">[1](#f1)</sup> for this function is that it should be hard to find such pair of values
  `$(x,x')$` also called collision.
@@ -56,22 +57,24 @@ So CRHF are what we are looking for: they allow to represent a potentially huge 
   <img src="{{site.url}}/images/merkle-tree/simple-merkle-tree.png" />
   <figcaption>Figure 1: A merkle tree for the set $\{x_1,x_2,x_3,x_4\}$.
   The values of the set are placed at the leaves (in blue). The hash of the set is obtained at the root (in green).
-  Conceptually a merkle tree can be seen as a CRHF for sets (on the right).</figcaption>
+  Conceptually a Merkle tree can be seen as a CRHF for sets (on the right).</figcaption>
 </figure>
 
 So now we need to solve the second problem.
-Here again naive approaches such as rehashing the whole set (see Figure) that includes one's element are clearly inefficient.
-The Merkle tree enables to go around this problem.
+Here again naive approaches such as rehashing the whole set that includes one's element are clearly inefficient.
+The Merkle tree enables to address our efficiency requirement.
 Let `$H$` be a CRHF and `$S=\{x_1,x_2,...,x_{2^l}\}$` a set of size `$|S|=2^l$` where `$l$` is some (small) constant.
 The Merkle tree (see Figure 1) is built bottom up, starting with the leaves where we put the values from left to right.
-Then for each internal node N, the value is obtained recursively by hashing the concatenation of the left (L) and right (R) child value.
-That is `$val(N)=  H(val(L)||val(R))$`. The value we obtain at the root that we call `$r$` is the short representation of the set.
+Then for each internal node `$N$`, the value is obtained recursively by hashing the concatenation of the left (`$L$`) and right (`$R$`) child value.
+That is `$\val(N)=  H(\val(L)||\val(R))$`. The value `$r$` we obtain at the root is the short representation of the set and indeed
+ the hash value of the set.
 
 Now in order to prove that for example element `$x_3$` belongs to `$S$` represented by `$r$` we need to provide
- the authentication path, that is the sibling nodes of the path from the leaf to the root. These nodes combined with the the value x_3 are enough to recompute the root r.
-Indeed the verification procedure `$\verif(x,w,r)$` where `$w$` is the authentication path will return `$true$`
+ the authentication path, that is the sibling nodes of the path from the leaf to the root.
+ These nodes combined with the the value `$x_3$` are enough to recompute the root `$r$`.
+Indeed the verification procedure `$\verif(x,w,r)$` where `$w$` is the authentication path, will return `$\mathtt{true}$`
  if from `$x$` and `$w$` we can recompute `$r$`.
-What is attractive about this verification procedure is that it runs in `$O(\log |S|)$` time as the authentication path
+What is attractive about this verification procedure is that it runs in `$O(\log |S|)$` time, as the authentication path
  contains only a logarithmic number of nodes.
 This indeed matters, for example if you want to run this check inside a smart contract.
 
@@ -100,10 +103,6 @@ What is important to remember anyways is that **a Merkle tree can be thought as 
 
 ## How an attacker can leverage the flexibility of the tree structure
 
-If the verification procedure does not put any condition on the structure of the tree (that is its depth, or location of leaves etc...)
-then it is possible to create a collision-resistant hash function `$H'$` such that an adversary is able to find two different sets `$S$`
-and `$S'$` with `$\mkr(S)=\mkr(S')$`.
-
 <!--
 Simple example where the attacker cannot choose the values
 -->
@@ -120,7 +119,7 @@ The values at the leaves of this new tree are `$x_5:=H(x_1||x_2)$` and `$x_6:=H(
 So now we have two different sets `$S=\{x_1,x_2,x_3,x_4\}$` and `$S'=\{x_5,x_6\}$` such that
 `$\mkr(S)=\mkr(S')$`.
 It is worth noting that the attacker has no direct control over the values `$x_5,x_6$` so this attack
- may not be useful in practice because for example the `$x_5,x_6$` are not valid representation of balances.
+ may not be useful in practice because for example the values `$x_5,x_6$` are not valid representation of balances.
 Yet our security definition is broken, which is enough of a problem.
 
 Next we will show another attack that is a bit more sophisticated as it allows the attacker to
@@ -132,7 +131,7 @@ More complex example where the attacker can choose his values, yet the hash func
 
 Let `$S = \{x_1,x_2,x_5,x_6\}$` where all the values are different and of length `$k+1$`.
 Let $x_3'$ and $x_4'$ two values of length `$k$` chosen by the attacker.
-Let `$S'= \{x_3,x_4\}$` where `$x_3=0||x_3'$` and `$x_4=0||x_4'$` and `$x_3,x_4$` and of length `$k+1$`.
+Let `$S'= \{x_3,x_4\}$` where `$x_3=0||x_3'$` and `$x_4=0||x_4'$` two string of length `$k+1$`.
 Let `$H: \{0,1\}^* \rightarrow \{0,1\}^k$` be a CRHF.
 We build `$H':\{0,1\}^* \rightarrow \{0,1\}^{k+1}$` as follows:
 <center>
@@ -191,8 +190,8 @@ One might object that this attack is artificial as well because indeed the adver
  based on values of the protocol and this might definitely not happen in practice.
 However at least from a theoretical point of view we are not able anymore to prove that if `$H$` is a CRHF
  then the Merkle tree is also a CRHF (if we allow a flexible structure on the tree).
-This is kind of annoying indeed as in order to justify the security of a complex protocol one should first be able to validate the
- security of each component separately (indeed this might not be sufficient but this is in all cases necessary).
+This is annoying indeed as in order to justify the security of a complex protocol one should first be able to validate the
+ security of each component separately (note however this might not be sufficient but this is in all cases necessary).
 
 On the practical side, this idea can be adapted to real world protocols with serious consequences.
 Indeed in Bitcoin [an attack](https://bitslog.com/2018/06/09/leaf-node-weakness-in-bitcoin-merkle-tree-design/) related to
@@ -207,7 +206,7 @@ This helps the attacker to get more control in order to compute a hash (internal
 
 So how can we avoid this kind of problem? The fix is indeed straightforward.
 It consists of computing the root of the tree in a slightly different way.
-Instead of returning the root `$r$` computed recursively by hashing the children we return
+Instead of returning the root `$r$` computed recursively by hashing the children, we return
 `$H(r||W||H)$` where `$W$` is the width of the tree (number of leaves from left to right) and `$H$` is the height.
 With this simple fix, the attacker cannot use the trick above anymore as the shape/structure of the tree is now *locked*
  by the last hash applied to obtain the root `$r'=H(r||W||H)$`.
@@ -220,9 +219,9 @@ With this simple fix, the attacker cannot use the trick above anymore as the sha
   but also the total sum of these balances.</figcaption>
 </figure>
 
-The idea of merkle tree can be extended in order to prove not only that some element belongs to a set but
+The functionality of Merkle trees can be extended in order to prove not only that some element belongs to a set but
 	also other global predicates on the set.
-For example shortly after the MtGox's collapse in 2014, G. Maxwell proposed protocol which aim is to enable
+For example shortly after MtGox's collapse in 2014, G. Maxwell proposed protocol which aim is to enable
  an exchange to prove its solvency.
 An important piece of the protocol is the *proof of liabilities* where the exchange declares some total amount owed to the customers
  and is able to convince that all the balances were taken into account when computing the global sum.
@@ -236,10 +235,10 @@ Computing the value of internal nodes consists of (1) computing the sum of the l
  concatenation of the new sum, the left node hash value and the right node hash value.
 By repeating this procedure until the root one obtains a hash value representing all the accounts and their balances, and a total sum
  owed to the customers.
-The verification procedure will consist in
+The verification procedure will consist in:
  * recomputing the root, comparing it to the published one.
  * checking that each sum computed in the internal nodes is done correctly.
- * Checking that all amount in the tree are positive.
+ * checking that all amount in the tree are positive.
 
  <figure>
    <img src="{{site.url}}/images/merkle-tree/attack-proof-of-liabilities.png" />
@@ -249,7 +248,7 @@ The verification procedure will consist in
 
 However as suggested in an [early post in Bitcoin Talk](https://bitcointalk.org/index.php?topic=595180.0) and described in more details in
 this [technical report](https://eprint.iacr.org/2018/1139), it is possible for a malicious exchange to report less liabilities than required:
-Instead of following the protocol,the adversary will set the balances of the leaves' parents as follows:
+Instead of following the protocol, the adversary will set the balances of the leaves' parents as follows:
 if node `$N$`'s children are leaves `$L_1$` and `$L_2$` with respective balances `$B_1$` and `$B_2$`, then the balance of this internal
 node is set to `$\mathtt{max}(B_1,B_2) + \Delta < \mathtt{sum}(B_1,B_2)$` instead of `$\mathtt{sum}(B_1,B_2)$`.
 Then the malicious exchange will provide the authentication path to each user ensuring so that the balance value of the sibling leaf is
@@ -268,7 +267,7 @@ without revealing the preimage of `$v$`.
 <br>
 
 In our protocol will also rely on a Merkle trees for proving liabilities.
-As you may expect we use padding techniques and ensure the attack of the previous section does not work by revealing the balances of each customer in the proof.
+As you may expect we use padding techniques and ensure the attack described above does not work by revealing the balances of each customer in the proof.
 Indeed for this specific application maintaining the privacy of balances is not a concern as these balances are leaked anyways
  because users' deposits and withdrawals are made on-chain.
 However we stumbled upon another trap.
