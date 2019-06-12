@@ -38,7 +38,7 @@ The first point can be addressed using collision-resistant hash functions (CRHF)
 A CRHF `$H:\{0,1\}^* \rightarrow \{0,1\}^k$` is a function that takes a string of any length as input
 a returns a string of fixed length $k$ as output.
 Its purpose is to provide a short representation for any kind of information such that this representation is unique in practice, that is if we have `$H(x)=H(x')$` then `$x=x'$`.
-[Obviously](https://en.wikipedia.org/wiki/Pigeonhole_principle) as the input set of the function is much bigger that the output set, there exists some values `$x,x'$`
+[Obviously](https://en.wikipedia.org/wiki/Pigeonhole_principle) as the input set of the function is much bigger that the output set, there exist some values `$x,x'$`
  such that `$H(x)=H(x')$` yet `$x \neq x'$`.
 Thus the security requirement<sup id="a1">[1](#f1)</sup> for this function is that it should be hard to find such pair of values
  `$(x,x')$` also called collision.
@@ -112,7 +112,7 @@ As the goal of a Merkle tree is to verify that an element belongs to some set $S
 A way to achieve this is to find two different sets `$S, S'$` such that $\mkr(S)=\mkr(S')$.
 In practice this means building to different trees $T$ (for $S$) and $T'$ (for $S'$)
 that yield the same root. If this is possible then the attacker will be able to provide a convincing
- proof for some element `$x' \in S' \setminus S$` (that is $x'$ belongs to $X'$ but not to $X$) and
+ proof for some element `$x' \in S' \setminus S$` (that is $x'$ belongs to $S'$ but not to $S$) and
  thus fool the verifier.
 
 <figure>
@@ -221,53 +221,66 @@ With this simple fix, the attacker cannot use the trick above anymore as the sha
 
 ## Adding new features to the Merkle tree: proof of liabilities
 
+The functionality of Merkle trees can be extended in order to prove not only that some element belongs to a set but also other global predicates.
+For example imagine we have a set of users $\{u_1,u_2,\cdots, u_n\}$ and each user $u_i$ has a balance $b_i$.
+In addition to be able to prove user $u_i$ owns $b_i$ tokens, we may also want to convince a verifier
+ that the total sum of balances is  $B = \sum_{i=1}^n b_i$.
+
+This can be useful if we want to be sure that an exchange is transparent regarding the total
+ money it owes to its customers. More on this below.
+
+A way to achieve this requirement is to enrich each node of the tree with a balance value (see Figure 5).
+
 <figure>
   <img src="{{site.url}}/images/merkle-tree/proof-of-liabilities.png" />
   <figcaption>Figure 5: Proof of liabilities. The Merkle tree tracks not only the elements of the set (balances assigned to users)
   but also the total sum of these balances.</figcaption>
 </figure>
 
-The functionality of Merkle trees can be extended in order to prove not only that some element belongs to a set but
-	also other global predicates on the set.
-For example shortly after MtGox's collapse in 2014, G. Maxwell proposed protocol which aim is to enable
- an exchange to prove its solvency.
-An important piece of the protocol is the *proof of liabilities* where the exchange declares some total amount owed to the customers
- and is able to convince that all the balances were taken into account when computing the global sum.
-In a nutshell, Maxwell's protocol uses a Merkle tree where each leaf contains the following information:
-A balance `$B$`, and a hash value `$v=H(B||ID||Nonce)$` where `$ID$` is a unique identifier of the client and `$Nonce$` is a random value
-(see Figure 5).
-
-Using the hash value instead of the balance data `$B||ID||Nonce$` directly into the leaf, is a way to increase users' privacy
- by not letting sibling leaf in the proof leak some information about another customer.
-Computing the value of internal nodes consists of (1) computing the sum of the left and right child balances, computing the hash of the
- concatenation of the new sum, the left node hash value and the right node hash value.
-By repeating this procedure until the root one obtains a hash value representing all the accounts and their balances, and a total sum
- owed to the customers.
-The verification procedure will consist in:
+Computing the value of internal nodes consists of (1) computing the sum of the left and right child balances, (2) computing the hash of the concatenation of the new sum,
+the left node hash value and the right node hash value.
+By repeating this procedure until the root one obtains a hash value representing all the accounts and their balances, and a total sum owed to the customers.
+The verification procedure will consist of:
  * recomputing the root, comparing it to the published one.
  * checking that each sum computed in the internal nodes is done correctly.
- * checking that all amount in the tree are positive.
+ * checking that all amounts in the tree are positive.
+
+<figure>
+  <img src="{{site.url}}/images/merkle-tree/proof-of-liabilities-privacy.png" />
+  <figcaption>Figure 6: Proof of liabilities with enhanced privacy.
+  The identity of the user in the leaves are not public.
+  </figcaption>
+</figure>
+
+This idea first appeared shortly after MtGox's collapse in 2014,
+when G. Maxwell proposed a protocol which aim is to enable an exchange to prove its solvency.
+An important piece of the protocol is the *proof of liabilities* which we just described where the goal
+ is to ensure that the exchange is accountable for all the customers' money it holds.
+However, Maxwell's protocol is a bit different as each leaf contains the following information:
+A balance `$B$`, and a hash value `$v=H(B||ID||Nonce)$` where `$ID$` is a unique identifier of the client and `$Nonce$` is a random value (see Figure 6).
+
+Using the hash value instead of the balance data `$B||ID||Nonce$` directly into the leaf, is a way to increase users' privacy by not letting sibling leaf in the proof leak some information about another customer.
 
  <figure>
    <img src="{{site.url}}/images/merkle-tree/attack-proof-of-liabilities.png" />
-   <figcaption>Figure 6: Attack on the proof of liabilities. Here we set $\Delta=10$. The forged proof provided to Alice contains
+   <figcaption>Figure 7: Attack on the proof of liabilities. Here we set $\Delta=10$. The forged proof provided to Alice contains
    the two nodes in red. A similar proof could be provided to other participants, adjusting the balance of the sibling leaf.</figcaption>
  </figure>
 
-However as suggested in an [early post in Bitcoin Talk](https://bitcointalk.org/index.php?topic=595180.0) and described in more details in
+This extra feature however can make the whole construction vulnerable: as suggested in an [early post in Bitcoin Talk](https://bitcointalk.org/index.php?topic=595180.0) and described in more details in
 this [technical report](https://eprint.iacr.org/2018/1139), it is possible for a malicious exchange to report less liabilities than required:
-Instead of following the protocol, the adversary will set the balances of the leaves' parents as follows:
+Instead of executing the protocol, the adversary will set the balances of the leaves' parents as follows:
 if node `$N$`'s children are leaves `$L_1$` and `$L_2$` with respective balances `$B_1$` and `$B_2$`, then the balance of this internal
 node is set to `$\mathtt{max}(B_1,B_2) + \Delta < \mathtt{sum}(B_1,B_2)$` instead of `$\mathtt{sum}(B_1,B_2)$`.
 Then the malicious exchange will provide the authentication path to each user ensuring that the balance value of the sibling leaf is
- equal to the difference between the parent node and the user's leaf balance (see Figure 6).
+ equal to the difference between the parent node and the user's leaf balance (see Figure 7).
 On the example, we set $\Delta=10$.
 The exchange will send a proof to Alice such that the sibling leaf has balance `$20$`, while Bob will
  receive a proof where the sibling leaf's balance is equal to `$10$`.
 By doing this the exchange is able to fool its users as only `$100$` coins are declared as liabilities when in reality a total of `$140$`
  belong to the customers.
 So what happened here? The problem is that the user has no way to verify that the balance claimed for the sibling leaf corresponds
-to the balance used to compute the hash value. That is given the sibling leaf `$B'$` , `$v=H(B||Id||Nonce)$`, nothing prevents the malicious
+to the balance used to compute the hash value. That is, given the sibling leaf `$B'$` , `$v=H(B||Id||Nonce)$`, nothing prevents the malicious
 exchange to use different `$B$` and `$B'$` values. One way to fix the problem is to explicitly put the balance of each child instead
 of only the sum in the parent node. Another more sophisticated approach is to provide a zero-knowledge proof that `$B'$` and `$B$` are equal
 without revealing the preimage of `$v$`.
@@ -275,7 +288,7 @@ without revealing the preimage of `$v$`.
 <br>
 
 In our protocol will also rely on a Merkle trees for proving liabilities.
-As you may expect we use padding techniques and ensure the attack described above does not work by revealing the balances of each customer in the proof.
+As you may expect we use padding techniques and ensure the attack described above does not work by revealing the balances of each customer in the proof as in Figure 5.
 Indeed for this specific application maintaining the privacy of balances is not a concern as these balances are leaked anyways
  because users' deposits and withdrawals are made on-chain.
 However we stumbled upon another trap.
@@ -286,7 +299,7 @@ In an early version of our protocol we assumed implicitly that the proof of liab
 Depending on the situation this can make a lot of difference.
 Indeed the (fixed) proof of liabilities only ensures that each user can check that his
  balance has been considered in the global accounting and nothing else.
-In particular nothing prevents to create different leaves for the same client.
+In particular nothing prevents a malicious exchange to create different leaves for the same client.
 In the context of proving the solvency of an exchange this cannot be considered as an attack as the goal of the attacker is to minimize the total amount of liabilities.
 
 However in our protocol these proofs are used to challenge potentially inconsistent statements of a corrupted exchange.
