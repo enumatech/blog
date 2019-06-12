@@ -7,8 +7,7 @@ author: Philippe Camacho
 ---
 
 In a previous post [(Trustless, Noncustodial Exchange Prototype)](https://blog.enuma.io/update/2019/03/08/trustless-noncustodial-exchange.html#merkle-trees), we already mentioned Merkle trees and their use in our protocol.
-Today we will go deeper into the subject, highlightling how easy it is to introduce security flaws when instantiating
- this seemingly simple cryptographic primitive.
+Today we will go deeper into the subject, highlightling how easy it is to introduce security flaws when instantiating this seemingly simple cryptographic primitive.
 
 <!--more-->
 
@@ -107,13 +106,22 @@ What is important to remember anyways is that **a Merkle tree can be thought as 
 Simple example where the attacker cannot choose the values
 -->
 
+So if you are an attacker what would you try to do?
+As the goal of a Merkle tree is to verify that an element belongs to some set $S$, an attacker will
+ try to find $x' \notin S$ and convince a verifier of the opposite  statement, that is $x \in S$.
+A way to achieve this is to find two different sets `$S, S'$` such that $\mkr(S)=\mkr(S')$.
+In practice this means building to different trees $T$ (for $S$) and $T'$ (for $S'$)
+that yield the same root. If this is possible then the attacker will be able to provide a convincing
+ proof for some element `$x' \in S' \setminus S$` (that is $x'$ belongs to $X'$ but not to $X$) and
+ thus fool the verifier.
+
 <figure>
   <img src="{{site.url}}/images/merkle-tree/tree-struct-attack-simple.png" />
   <figcaption>Figure 3: A simple attack on the tree structure. The attacker cannot choose values $x_5$ and $x_6$.</figcaption>
 </figure>
 
-A simple attack scenario is depicted in Figure 3:
-On the left we have a Merkle tree corresponding to the set `$S=\{x_1,x_2,x_3,x_4\}$`.
+Let us have a look at Figure 3 to see how this can be done:
+On the left we have a Merkle tree corresponding to the (legitimate) set `$S=\{x_1,x_2,x_3,x_4\}$`.
 In order to find a collision the attacker can simply remove the leaves and obtain the smaller tree on the right.
 The values at the leaves of this new tree are `$x_5:=H(x_1||x_2)$` and `$x_6:=H(x_3||x_4)$`.
 So now we have two different sets `$S=\{x_1,x_2,x_3,x_4\}$` and `$S'=\{x_5,x_6\}$` such that
