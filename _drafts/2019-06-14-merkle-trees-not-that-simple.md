@@ -251,7 +251,7 @@ this [technical report](https://eprint.iacr.org/2018/1139), it is possible for a
 Instead of following the protocol, the adversary will set the balances of the leaves' parents as follows:
 if node `$N$`'s children are leaves `$L_1$` and `$L_2$` with respective balances `$B_1$` and `$B_2$`, then the balance of this internal
 node is set to `$\mathtt{max}(B_1,B_2) + \Delta < \mathtt{sum}(B_1,B_2)$` instead of `$\mathtt{sum}(B_1,B_2)$`.
-Then the malicious exchange will provide the authentication path to each user ensuring so that the balance value of the sibling leaf is
+Then the malicious exchange will provide the authentication path to each user ensuring that the balance value of the sibling leaf is
  equal to the difference between the parent node and the user's leaf balance (see Figure 6).
 On the example, we set $\Delta=10$.
 The exchange will send a proof to Alice such that the sibling leaf has balance `$20$`, while Bob will
