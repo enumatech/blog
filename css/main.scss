@@ -63,15 +63,17 @@ table {
     border-spacing: 0;
 }
 
-table td,
-table th {
-  border: 1px solid #dfe2e5;
-  padding: 3px 7px;
-}
-table th {
-    background-color: #efefef;
-}
+table.basic {
+  td, th {
+    border: 1px solid #dfe2e5;
+    padding: 3px 7px;
+  }
 
-table tr {
-  border-top: 1px solid #c6cbd1;
+  th {
+    background-color: #efefef;
+  }
+
+  tr {
+    border-top: 1px solid #c6cbd1;
+  }
 }

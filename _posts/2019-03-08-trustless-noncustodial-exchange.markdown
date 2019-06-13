@@ -48,6 +48,7 @@ traditional centralized exchanges and decentralized exchanges with blockchain
 settlement.
 <br>
 
+{:.basic}
 | Solution             | Decentralized Order Matching | Trustless | Noncustodian | Performance | Security | Online Requirement |
 |----------------------|------------------------------|-----------|---------------|-------------|----------|-------------------|
 | Traditional exchange | No                           | No        | No            | High        | Low      | None              |
