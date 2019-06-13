@@ -6,7 +6,8 @@ categories: update
 author: Philippe Camacho
 ---
 
-In a previous post [(Trustless, Noncustodial Exchange Prototype)](https://blog.enuma.io/update/2019/03/08/trustless-noncustodial-exchange.html#merkle-trees), we already mentioned Merkle trees and their use in our protocol.
+In a previous post [(Trustless, Noncustodial Exchange Prototype)](https://blog.enuma.io/update/2019/03/08/trustless-noncustodial-exchange.html#merkle-trees), we already mentioned Merkle trees and their use in the
+exchange protocol we're building with the [OAX Foundation](https://www.oax.org).
 Today we will go deeper into the subject, highlightling how easy it is to introduce security flaws when instantiating this seemingly simple cryptographic primitive.
 
 <!--more-->
@@ -313,7 +314,7 @@ This decision had two benefits: we avoided using a more complex data structure, 
 
 As usual the evil is in the details and these attacks on apparently simple protocols are a reminder that intuition
  is not enough when dealing with security.
-At Enuma we are always looking for better ways to build secure software.
+At Enuma Technologies we are always looking for better ways to build secure software.
 Currently we are exploring formal methods techniques in order to mechanize the analysis and verification of our protocol.
 
 ## Author

@@ -252,7 +252,7 @@ into production use. [Status](https://status.im/), an interesting Ethereum
 client project, uses Whisper to implement chat, and is probably the biggest
 production Whisper user at the moment.
 
-We at Enuma are also making use of Whisper for the
+We at Enuma Technologies are also making use of Whisper for the
 [OAX project](https://www.oax.org/) for order signaling.
 
 The latest version of Whisper is V6. Prior versions of Whisper (V2-V5) have now
