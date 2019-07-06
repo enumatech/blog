@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Order Cancellation in Layer 2 Exchange
+title:  Order Cancellation in Layer 2 Exchanges
 date:   2019-07-03 00:00:00 +0800
 categories: update
 author: Mathis Antony
@@ -10,7 +10,7 @@ At the time of writing our partner [OAX Foundation](https://www.oax.org) is
 about to release our trustless layer 2 exchange on the Rinkeby network. This
 version is fully trustless with the exception of the order cancellation
 mechanism. In this blog post we will elaborate on the challenges of order
-cancellation in both trustful and trustless setting.
+cancellation in both trustful and trustless settings.
 
 <!--more-->
 
